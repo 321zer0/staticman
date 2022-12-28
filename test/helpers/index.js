@@ -17,7 +17,7 @@ if (process.env.TEST_DEV !== 'true') {
 }
 
 const rsa = new NodeRSA()
-rsa.importKey(config.get('rsaPrivateKey'))
+rsa.importKey(config.get('rsaPrivateKey'), 'private')
 
 const fields = {
   name: 'Eduardo Bouças',
@@ -31,7 +31,7 @@ const parameters = {
   property: 'comments',
   repository: 'foobar',
   username: 'johndoe',
-  version: '3'
+  version: '2'
 }
 
 const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')

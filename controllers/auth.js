@@ -5,8 +5,8 @@ const oauth = require('../lib/OAuth')
 const RSA = require('../lib/RSA')
 const Staticman = require('../lib/Staticman')
 
-module.exports = (req, res) => {
-  const staticman = new Staticman(req.params)
+module.exports = async (req, res) => {
+  const staticman = await new Staticman(req.params)
   staticman.setConfigPath()
 
   let requestAccessToken
@@ -33,14 +33,15 @@ module.exports = (req, res) => {
 
   return staticman.getSiteConfig()
     .then(requestAccessToken)
-    .then((accessToken) => {
-      const git = gitFactory.create(req.params.service, {
-        oauthToken: accessToken
+    .then(async (accessToken) => {
+      const git = await gitFactory.create(req.params.service, {
+        oauthToken: accessToken,
+        version: req.params.version
       })
 
       // TODO: Simplify this when v2 support is dropped.
       const getUser = req.params.version === '2' && req.params.service === 'github'
-        ? git.api.users.get({}).then(({data}) => data)
+        ? git.api.users.getAuthenticated({}).then(({data}) => data)
         : git.getCurrentUser()
 
       return getUser
