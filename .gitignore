@@ -6,4 +6,4 @@ config.*.json
 !config.test.json
 !config.example.json
 node_modules/
-staticman_key
+staticman_key!config.production.json
